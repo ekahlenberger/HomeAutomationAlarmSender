@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Home Automation Alarm Sender</string>
+    <string name="openhabUrl_edit_hint">OpenHab REST URL</string>
+    <string name="openhabItemName_edit_hint">Item name</string>
+    <string name="openhabSave_btn_text">Save</string>
+    <string name="pref_key">net.kahlenberger.eberhard.haas.openhab</string>
+    <string name="resturl_key">url</string>
+    <string name="item_key">item</string>
+    <string name="error_key">error</string>
+</resources>
