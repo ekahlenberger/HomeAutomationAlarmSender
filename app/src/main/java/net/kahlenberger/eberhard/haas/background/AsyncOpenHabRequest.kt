@@ -17,39 +17,38 @@ import java.net.URL
 class AsyncOpenHabRequest : AsyncTask<OpenHabRequestData, String, OpenHABResponse>()
 {
     @SuppressLint("StaticFieldLeak")
-    private var callerContext: Context? = null
-    override fun onPostExecute(result: OpenHABResponse) {
-        val context = callerContext!!
-        callerContext = null
-        when (result) {
-            OpenHABResponse.Success -> Toast.makeText(context, context.getString(R.string.toast_sendSuccess), Toast.LENGTH_SHORT).show()
-            OpenHABResponse.Denied -> Toast.makeText(context, context.getString(R.string.toast_sendDenied), Toast.LENGTH_LONG).show()
-            //OpenHABResponse.FailureRetry -> Toast.makeText(context, context.getString(R.string.toast_sendFailureRetry), Toast.LENGTH_LONG).show()
-            else -> {}
-        }
 
+    override fun onPostExecute(result: OpenHABResponse) {
+        if (result.context != null) {
+            when (result.type) {
+                OpenHABResponseType.Success -> Toast.makeText(result.context, result.context.getString(R.string.toast_sendSuccess), Toast.LENGTH_SHORT).show()
+                OpenHABResponseType.Denied -> Toast.makeText(result.context, result.context.getString(R.string.toast_sendDenied), Toast.LENGTH_LONG).show()
+                    //OpenHABResponseType.FailureRetry -> Toast.makeText(context, context.getString(R.string.toast_sendFailureRetry), Toast.LENGTH_LONG).show()
+                else -> { }
+            }
+        }
     }
 
     override fun doInBackground(vararg params: OpenHabRequestData?): OpenHABResponse {
-        if (isCancelled) return OpenHABResponse.NotDone
 
         val request = params.first()
 
         if (request != null)
         {
-            callerContext = request.Context
-            val response = sendOpenhabReq(request.OpenHabUrl,request.ItemName,request.NextAlarm,request.Context, request.JParams == null || request.AlService == null)
-            if (request.JParams != null && request.AlService != null)
+            if (isCancelled) return OpenHABResponse(OpenHABResponseType.NotDone,request.context)
+
+            val response = sendOpenhabReq(request.openHabUrl,request.itemName,request.nextAlarm,request.context, request.jParams == null || request.alService == null)
+            if (request.jParams != null && request.alService != null)
             {
-                request.JParams.extras.putInt("requestCount",request.JParams.extras.getInt("requestCount",1) + 1)
-                request.AlService.jobFinished(request.JParams,response == OpenHABResponse.FailureRetry)
+                request.jParams.extras.putInt("requestCount",request.requestCount + 1)
+                request.alService.jobFinished(request.jParams,response == OpenHABResponseType.FailureRetry)
             }
-            return response
+            return OpenHABResponse(response,request.context)
         }
-        return OpenHABResponse.NotDone
+        return OpenHABResponse(OpenHABResponseType.NotDone,null)
     }
 
-    private fun sendOpenhabReq(restUrl: String, itemName: String, payload: String, context: Context, jobOnError: Boolean) :OpenHABResponse   {
+    private fun sendOpenhabReq(restUrl: String, itemName: String, payload: String, context: Context, jobOnError: Boolean) : OpenHABResponseType {
         var connection: HttpURLConnection? =  null
         try
         {
@@ -70,17 +69,17 @@ class AsyncOpenHabRequest : AsyncTask<OpenHabRequestData, String, OpenHABRespons
             if (responseCode == HttpURLConnection.HTTP_ACCEPTED)
             {
                 setPreference(context, R.string.pref_key, R.string.error_key,"")
-                return OpenHABResponse.Success
+                return OpenHABResponseType.Success
             }
             setPreference(context, R.string.pref_key, R.string.error_key,"Target responded with " + responseCode.toString())
-            return OpenHABResponse.Denied
+            return OpenHABResponseType.Denied
         }
         catch (ex:Exception)
         {
             setPreference(context, R.string.pref_key, R.string.error_key,ex.message + "trying again")
             if (jobOnError)
                 createJob(restUrl, itemName, payload, context)
-            return OpenHABResponse.FailureRetry
+            return OpenHABResponseType.FailureRetry
         }
         finally {
             if (connection != null)
