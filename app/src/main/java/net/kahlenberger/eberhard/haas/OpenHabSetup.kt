@@ -24,9 +24,9 @@ class OpenHabSetup : AppCompatActivity() {
         (findViewById<EditText>(R.id.editURL)).setText(restUrl)
         (findViewById<EditText>(R.id.editItemName)).setText(itemName)
         if (error != "")
-            (findViewById<TextView>(R.id.textViewError)).setText("Last request error: " + error)
+            (findViewById<TextView>(R.id.textViewError)).text = "Last request error: " + error
         else
-            (findViewById<TextView>(R.id.textViewError)).setText("")
+            (findViewById<TextView>(R.id.textViewError)).text = ""
     }
 
     override fun onResume() {
@@ -38,9 +38,9 @@ class OpenHabSetup : AppCompatActivity() {
     {
         val error = pref.getString(getString(R.string.error_key),"")
         if (error != "")
-            (findViewById<TextView>(R.id.textViewError)).setText("Last request error: " + error)
+            (findViewById<TextView>(R.id.textViewError)).text = "Last request error: " + error
         else
-            (findViewById<TextView>(R.id.textViewError)).setText("")
+            (findViewById<TextView>(R.id.textViewError)).text = ""
     }
 
 
@@ -55,7 +55,7 @@ class OpenHabSetup : AppCompatActivity() {
             edit.putString(getString(R.string.item_key),itemName)
             edit.apply()
             if (restUrl == "" || itemName == "")
-                Toast.makeText(this,"alarm sender deactivated",Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context,"alarm sender deactivated",Toast.LENGTH_LONG).show()
             else
                 Toast.makeText(this,"alarm sender activated and configured", Toast.LENGTH_LONG).show()
         }
