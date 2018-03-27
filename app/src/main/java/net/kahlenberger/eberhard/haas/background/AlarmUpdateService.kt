@@ -2,18 +2,18 @@ package net.kahlenberger.eberhard.haas.background
 
 import android.app.job.JobParameters
 import android.app.job.JobService
+import net.kahlenberger.eberhard.haas.helpers.MaxJobIdIncrementProvider
 
 class AlarmUpdateService : JobService() {
-
+    private val jobIdProvider = MaxJobIdIncrementProvider()
     private var runningRequest:AsyncOpenHabRequest?  = null
+
     override fun onStartJob(param: JobParameters?): Boolean {
         val extras = param!!.extras
         val url = extras.getString("url")
         val item = extras.getString("item")
-        val payload = extras.getString("payload")
-        val requestCount = extras.getInt("requestCount")
-        runningRequest = AsyncOpenHabRequest()
-        runningRequest!!.execute(OpenHabRequestData(url, item, payload, applicationContext,requestCount,param,this))
+        runningRequest = AsyncOpenHabRequest(jobIdProvider)
+        runningRequest!!.execute(OpenHabRequestData(url, item, applicationContext,param,this))
         return false
     }
 

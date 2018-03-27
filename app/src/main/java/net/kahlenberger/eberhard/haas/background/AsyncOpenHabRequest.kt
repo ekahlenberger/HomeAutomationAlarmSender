@@ -1,6 +1,7 @@
 package net.kahlenberger.eberhard.haas.background
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.job.JobInfo
 import android.app.job.JobInfo.Builder
 import android.app.job.JobScheduler
@@ -9,12 +10,13 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.PersistableBundle
 import android.widget.Toast
+import net.kahlenberger.eberhard.haas.helpers.IProvideFreeJobId
 import net.kahlenberger.eberhard.haas.R
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AsyncOpenHabRequest : AsyncTask<OpenHabRequestData, String, OpenHABResponse>()
+class AsyncOpenHabRequest(val jobIdProvider: IProvideFreeJobId) : AsyncTask<OpenHabRequestData, String, OpenHABResponse>()
 {
     @SuppressLint("StaticFieldLeak")
 
@@ -37,18 +39,21 @@ class AsyncOpenHabRequest : AsyncTask<OpenHabRequestData, String, OpenHABRespons
         {
             if (isCancelled) return OpenHABResponse(OpenHABResponseType.NotDone,request.context)
 
-            val response = sendOpenhabReq(request.openHabUrl,request.itemName,request.nextAlarm,request.context, request.jParams == null || request.alService == null)
+            val am = request.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val nextAlarm = am.nextAlarmClock
+            var sendAlarm = "0"
+            if (nextAlarm != null) sendAlarm = (nextAlarm.triggerTime / 1000).toString()
+            val response = sendOpenhabReq(request.openHabUrl,request.itemName, sendAlarm ,request.context)
             if (request.jParams != null && request.alService != null)
             {
-                request.jParams.extras.putInt("requestCount",request.requestCount + 1)
-                request.alService.jobFinished(request.jParams,response == OpenHABResponseType.FailureRetry)
+                request.alService.jobFinished(request.jParams,false)
             }
             return OpenHABResponse(response,request.context)
         }
         return OpenHABResponse(OpenHABResponseType.NotDone,null)
     }
 
-    private fun sendOpenhabReq(restUrl: String, itemName: String, payload: String, context: Context, jobOnError: Boolean) : OpenHABResponseType {
+    private fun sendOpenhabReq(restUrl: String, itemName: String, payload: String, context: Context) : OpenHABResponseType {
         var connection: HttpURLConnection? =  null
         try
         {
@@ -77,8 +82,7 @@ class AsyncOpenHabRequest : AsyncTask<OpenHabRequestData, String, OpenHABRespons
         catch (ex:Exception)
         {
             setPreference(context, R.string.pref_key, R.string.error_key,ex.message + "trying again")
-            if (jobOnError)
-                createJob(restUrl, itemName, payload, context)
+            createJob(restUrl, itemName, context)
             return OpenHABResponseType.FailureRetry
         }
         finally {
@@ -95,14 +99,14 @@ class AsyncOpenHabRequest : AsyncTask<OpenHabRequestData, String, OpenHABRespons
         edit.commit()
     }
 
-    private fun createJob(restUrl: String, itemName: String, payload: String, context: Context){
-        val job = Builder(1, ComponentName(context,AlarmUpdateService::class.java))
+    private fun createJob(restUrl: String, itemName: String, context: Context){
+        val newJobId = jobIdProvider.getFreeJobId(context)
+        val job = Builder(newJobId, ComponentName(context,AlarmUpdateService::class.java))
         job.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+        //job.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
         val extras = PersistableBundle()
         extras.putString("url",restUrl)
         extras.putString("item", itemName)
-        extras.putString("payload",payload)
-        extras.putInt("requestCount",1)
         job.setRequiresCharging(false).setRequiresDeviceIdle(false).setExtras(extras).setMinimumLatency(30000)
 
         (context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as  JobScheduler).schedule(job.build())
