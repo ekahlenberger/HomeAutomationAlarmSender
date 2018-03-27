@@ -1,0 +1,21 @@
+**HAAS** - Home Automation Alarm Sender
+
+Your smart phone is your alarm? Great. Integrate it into your openHAB installation. Create a wakeup light, turn on the heating, get your coffee brewed on time and most importantly: everything is chilled if you need to get up later. Sync your alarm time with openHAB and get creative.
+
+HAAS does one thing and one thing only. It sends your android alarm setting to your openHAB server. No ads, no tracking, no pro features, no problems (cannot guarantee for that, but leave me a message if you encounter a problem). If you don't have an openHAB Server this app is probably useless for you :/
+
+https://github.com/ekahlenberger/HomeAutomationAlarmSender
+
+You've got to prepare  some things to make it work:
+* Install the REST API on your openHAB server and find the URL for the REST API.
+* Create an Item to receive the epoch timestamp (seconds  since 01/01/1970)
+
+Open HAAS and input the URL and ItemName. Click "save" and you are done.
+
+_Example_:
+
+My openhab server runs under "http://MyOpenHab:8080" and so my REST API is located at "http://MyOpenHab:8080/rest" (this is the URL needed for HAAS). And I created an item in Global.items with: "Number WakeUpInput" ...
+
+The rest is up to you. Convert the "Number" into a java date object and work with it.
+
+Beta: https://play.google.com/apps/testing/net.kahlenberger.eberhard.haas
