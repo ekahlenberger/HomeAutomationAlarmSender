@@ -1,3 +1,7 @@
+<p align=center>
+  <img alt="Logo" src="fastlane/metadata/android/en-US/images/icon.png" width="100"/>
+</p>
+
 # HomeAutomationAlarmSender
 Home Automation Alarm sender for android alarm to [openHAB](https://openhab.org) sync
 
