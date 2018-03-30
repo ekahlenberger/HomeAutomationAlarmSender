@@ -68,6 +68,6 @@ end
 ```
 - MorningLightColor is an item: Color MorningLightColor which holds a predefined color I like to wake up to in the morning
 - WakeUpStartLightColor is and item: Color WakeUpStartLightColor which holds a very dark color I don't wake up to
-- SleepingRommLight is the actual light item connected to my sleeping room lamp
+- SleepingRoomLight is the actual light item connected to my sleeping room lamp
 
 
