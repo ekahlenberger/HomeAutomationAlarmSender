@@ -44,11 +44,12 @@ class AsyncOpenHabRequest(val jobIdProvider: IProvideFreeJobId, val packageHandl
         val nextAlarm = am.nextAlarmClock
 
         var sendAlarm:Long? = null
-        if (nextAlarm.triggerTime == request.defaultAlarm || packageHandler.addPackageAndCheckIfAllowed(request.context,nextAlarm.showIntent.creatorPackage)) {
-            if (nextAlarm != null) sendAlarm = nextAlarm.triggerTime
+        if (nextAlarm != null) {
+            if (nextAlarm.triggerTime == request.defaultAlarm || packageHandler.addPackageAndCheckIfAllowed(request.context, nextAlarm.showIntent.creatorPackage)) {
+                sendAlarm = nextAlarm.triggerTime
+            } else if (request.defaultAlarm != null)
+                sendAlarm = request.defaultAlarm
         }
-        else if (request.defaultAlarm != null)
-            sendAlarm = request.defaultAlarm
 
         val response = sendOpenhabReq(request.openHabUrl,request.itemName, sendAlarm ,request.context)
         if (request.jParams != null && request.alService != null)

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.kahlenberger.eberhard.haas">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,23 +16,29 @@
         <activity android:name=".OpenHabSetup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ManageAlarmApps"
+            android:parentActivityName=".OpenHabSetup" />
 
         <receiver
             android:name=".background.AlarmChangedReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED"/>
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".background.AlarmUpdateService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true"
             android:exported="true"
-            android:enabled="true" />
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
     </application>
 
 </manifest>

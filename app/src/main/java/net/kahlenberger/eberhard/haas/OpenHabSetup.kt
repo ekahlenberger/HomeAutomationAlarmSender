@@ -1,6 +1,7 @@
 package net.kahlenberger.eberhard.haas
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_open_hab_setup.*
 
 class OpenHabSetup : AppCompatActivity() {
 
@@ -19,14 +21,10 @@ class OpenHabSetup : AppCompatActivity() {
         val pref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
         val restUrl = pref.getString(getString(R.string.resturl_key), "")
         val itemName = pref.getString(getString(R.string.item_key), "")
-        val error = pref.getString(getString(R.string.error_key), "")
 
-        (findViewById<EditText>(R.id.editURL)).setText(restUrl)
-        (findViewById<EditText>(R.id.editItemName)).setText(itemName)
-        if (error != "")
-            (findViewById<TextView>(R.id.textViewError)).text = "Last request error: " + error
-        else
-            (findViewById<TextView>(R.id.textViewError)).text = ""
+        editURL.setText(restUrl)
+        editItemName.setText(itemName)
+        showError(getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE))
     }
 
     override fun onResume() {
@@ -38,9 +36,9 @@ class OpenHabSetup : AppCompatActivity() {
     {
         val error = pref.getString(getString(R.string.error_key),"")
         if (error != "")
-            (findViewById<TextView>(R.id.textViewError)).text = "Last request error: " + error
+            textViewError.text = "Last request error: " + error
         else
-            (findViewById<TextView>(R.id.textViewError)).text = ""
+            textViewError.text = ""
     }
 
 
@@ -57,7 +55,11 @@ class OpenHabSetup : AppCompatActivity() {
             if (restUrl == "" || itemName == "")
                 Toast.makeText(view.context,"alarm sender deactivated",Toast.LENGTH_LONG).show()
             else
-                Toast.makeText(this,"alarm sender activated and configured", Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context,"alarm sender activated and configured", Toast.LENGTH_LONG).show()
         }
+    }
+    fun callManageAlarmApps(view: View){
+        val i = Intent(view.context, ManageAlarmApps::class.java)
+        startActivity(i)
     }
 }

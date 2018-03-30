@@ -19,11 +19,11 @@ class AlarmChangedReceiver : BroadcastReceiver() {
 
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val nextAlarm = am.nextAlarmClock
-        val scheduledByPackage = nextAlarm.showIntent.creatorPackage
+        val scheduledByPackage = nextAlarm?.showIntent?.creatorPackage
         val pref = context.getSharedPreferences(context.getString(R.string.pref_key),Context.MODE_PRIVATE)
         val restUrl:String  = pref.getString(context.getString(R.string.resturl_key),"")
         val itemName:String = pref.getString(context.getString(R.string.item_key),"")
-        if (!packageHandler.addPackageAndCheckIfAllowed(context,scheduledByPackage)) return
+        if (scheduledByPackage != null && !packageHandler.addPackageAndCheckIfAllowed(context,scheduledByPackage)) return
 
         if (restUrl != "" && itemName != "" && jobIdProvider.getFreeJobId(context) == 1)
             AsyncOpenHabRequest(jobIdProvider,packageHandler).execute(OpenHabRequestData(restUrl, itemName,nextAlarm?.triggerTime,  context))
