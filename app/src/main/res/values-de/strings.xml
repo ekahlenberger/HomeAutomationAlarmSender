@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="openhabItemName_edit_hint">Itemname</string>
+    <string name="openhabSave_btn_text">Speichern</string>
+    <string name="openhabError_text">Letzter Verbindungsfehler: %1$s</string>
+    <string name="toast_receiverConfigured">Weckersender konfiguriert und aktiviert</string>
+    <string name="toast_receiverDisabled">Weckersender deaktiviert</string>
+    <string name="toast_sendSuccess">Neue Weckzeit an openHAB-Instanz gesendet</string>
+    <string name="toast_sendDenied">An openHAB-Instanz gesendete Weckzeit wurde abgelehnt</string>
+    <string name="toast_sendFailureRetry">Fehler, Weckzeit nicht erfolgreich an openHAB gesendet. Es wird später erneut versucht.</string>
+    <string name="empty_app_list">Bisher wurde von keiner App eine Weckzeit gesetzt. Alle Apps sind erlaubt.</string>
+    <string name="allowed_app_update_info">Nur Weckzeiten erlaubter Apps werden an ihre openHAB-Instanz gesendet. Dies verändert nicht die tatsächlich eingestellten Weckzeiten. Wenn die nächste Weckzeit nicht von einer erlaubten App erstellt wurde, wird keine Aktualisierung an openHAB gesendet.</string>
+    <string name="generic_app_icon">Generisches App-Icon</string>
+    <string name="manage_alarm_apps">Wecker-Apps verwalten</string>
+    <string name="openhabUrl_edit_hint">openHAB REST URL</string>
+    <string name="specific_app_icon">App-Icon von %1$1</string>
+</resources>

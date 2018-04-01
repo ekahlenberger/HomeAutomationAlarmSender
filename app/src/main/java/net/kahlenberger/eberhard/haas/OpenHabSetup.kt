@@ -36,7 +36,7 @@ class OpenHabSetup : AppCompatActivity() {
     {
         val error = pref.getString(getString(R.string.error_key),"")
         if (error != "")
-            textViewError.text = "Last request error: " + error
+            textViewError.text = getString(R.string.openhabError_text,error)
         else
             textViewError.text = ""
     }
@@ -53,9 +53,9 @@ class OpenHabSetup : AppCompatActivity() {
             edit.putString(getString(R.string.item_key),itemName)
             edit.apply()
             if (restUrl == "" || itemName == "")
-                Toast.makeText(view.context,"alarm sender deactivated",Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context,getString(R.string.toast_receiverDisabled),Toast.LENGTH_LONG).show()
             else
-                Toast.makeText(view.context,"alarm sender activated and configured", Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context,getString(R.string.toast_receiverConfigured), Toast.LENGTH_LONG).show()
         }
     }
     fun callManageAlarmApps(view: View){

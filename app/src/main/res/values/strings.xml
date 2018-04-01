@@ -1,19 +1,24 @@
 <resources>
-    <string name="app_name">Home Automation Alarm Sender</string>
-    <string name="openhabUrl_edit_hint">openHAB REST URL</string>
-    <string name="openhabItemName_edit_hint">Item name</string>
-    <string name="openhabSave_btn_text">Save</string>
-    <string name="pref_key">net.kahlenberger.eberhard.haas.openhab</string>
-    <string name="resturl_key">url</string>
-    <string name="item_key">item</string>
-    <string name="error_key">error</string>
-    <string name="knownPackages_key">knownPackages</string>
-    <string name="ignoredPackages_key">ignoredPackages</string>
-    <string name="toast_sendSuccess">New alarm sent to openHAB instance</string>
-    <string name="toast_sendDenied">Alarm not sent to openHAB but was not accepted</string>
-    <string name="toast_sendFailureRetry">Error, alarm not send to openHAB, will try again later.</string>
-    <string name="empty_app_list">No app scheduled an alarm yet. All apps allowed</string>
-    <string name="allowed_app_update_info">Only an alarm of an allowed app is sent to your openHAB server. This does not affect the actual scheduled alarms. If the next alarm is not scheduled by an allowed app, no update is sent to openHAB.</string>
-    <string name="generic_app_icon">generic app icon</string>
-    <string name="manage_alarm_apps">Manage alarm apps</string>
+    <string name="app_name" translatable="false">Home Automation Alarm Sender</string>
+    <string name="openhabUrl_edit_hint" translatable="true">openHAB REST URL</string>
+    <string name="openhabItemName_edit_hint" translatable="true">Item name</string>
+    <string name="openhabSave_btn_text" translatable="true">Save</string>
+    <string name="openhabError_text" translatable="true">Last request error: %1$s</string>
+    <string name="toast_receiverConfigured" translatable="true">alarm sender activated and configured</string>
+    <string name="toast_receiverDisabled" translatable="true">alarm sender deactivated</string>
+    <string name="pref_key" translatable="false">net.kahlenberger.eberhard.haas.openhab</string>
+    <string name="resturl_key" translatable="false">url</string>
+    <string name="item_key" translatable="false">item</string>
+    <string name="error_key" translatable="false">error</string>
+    <string name="knownPackages_key" translatable="false">knownPackages</string>
+    <string name="ignoredPackages_key" translatable="false">ignoredPackages</string>
+    <string name="toast_sendSuccess" translatable="true">New alarm sent to openHAB instance</string>
+    <string name="toast_sendDenied" translatable="true">Alarm sent to openHAB but was not accepted</string>
+    <string name="toast_sendFailureRetry" translatable="true">Error, alarm not send to openHAB, will try again later.</string>
+    <string name="empty_app_list" translatable="true">No app scheduled an alarm yet. All apps allowed</string>
+    <string name="allowed_app_update_info" translatable="true">Only an alarm of an allowed app is sent to your openHAB server. This does not affect the actual scheduled alarms. If the next alarm is not scheduled by an allowed app, no update is sent to openHAB.</string>
+    <string name="generic_app_icon" translatable="true">generic app icon</string>
+    <string name="specific_app_icon" translatable="true">App icon of %1$s</string>
+    <string name="manage_alarm_apps" translatable="true">Manage alarm apps</string>
+
 </resources>
