@@ -6,8 +6,8 @@ import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_open_hab_setup.*
 
@@ -24,6 +24,7 @@ class OpenHabSetup : AppCompatActivity() {
 
         editURL.setText(restUrl)
         editItemName.setText(itemName)
+        editItemName.onSubmit { saveSettings(btnSave) }
         showError(getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE))
     }
 
@@ -61,5 +62,13 @@ class OpenHabSetup : AppCompatActivity() {
     fun callManageAlarmApps(view: View){
         val i = Intent(view.context, ManageAlarmApps::class.java)
         startActivity(i)
+    }
+    fun EditText.onSubmit(func: () -> Unit){
+        setOnEditorActionListener{_,actionId,_ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE){
+                func()
+            }
+            true
+        }
     }
 }

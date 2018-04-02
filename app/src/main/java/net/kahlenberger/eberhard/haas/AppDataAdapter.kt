@@ -12,6 +12,7 @@ class AppDataAdapter(var appDataset: Array<AndroidAppData>, val packageHandler: 
     class AppDataViewHolder(itemView: View, val packageHandler: IHandleSeenPackages) : RecyclerView.ViewHolder(itemView){
         fun bind(part: AndroidAppData){
             itemView.appNameTextView.text = part.name
+            itemView.appIconImageView.contentDescription =  itemView.context.getString(R.string.specific_app_icon,part.name)
             itemView.appPackageTextView.text = part.packageName
             itemView.appIconImageView.setImageDrawable(part.icon)
             itemView.usePackageSwitch.isChecked = part.active

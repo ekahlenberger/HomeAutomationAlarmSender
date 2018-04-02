@@ -13,5 +13,5 @@
     <string name="generic_app_icon">Generisches App-Icon</string>
     <string name="manage_alarm_apps">Wecker-Apps verwalten</string>
     <string name="openhabUrl_edit_hint">openHAB REST URL</string>
-    <string name="specific_app_icon">App-Icon von %1$1</string>
+    <string name="specific_app_icon">App-Icon von %1$s</string>
 </resources>
