@@ -19,7 +19,6 @@ import java.net.URL
 
 class AsyncOpenHabRequest(val jobIdProvider: IProvideFreeJobId, val packageHandler: IHandleSeenPackages) : AsyncTask<OpenHabRequestData, String, OpenHABResponse>()
 {
-    @SuppressLint("StaticFieldLeak")
 
     override fun onPostExecute(result: OpenHABResponse) {
         if (result.context != null) {
@@ -44,11 +43,17 @@ class AsyncOpenHabRequest(val jobIdProvider: IProvideFreeJobId, val packageHandl
         val nextAlarm = am.nextAlarmClock
 
         var sendAlarm:Long? = null
-        if (nextAlarm != null) {
-            if (nextAlarm.triggerTime == request.defaultAlarm || packageHandler.addPackageAndCheckIfAllowed(request.context, nextAlarm.showIntent.creatorPackage)) {
-                sendAlarm = nextAlarm.triggerTime
-            } else if (request.defaultAlarm != null)
-                sendAlarm = request.defaultAlarm
+        try {
+            if (nextAlarm != null) {
+                if (nextAlarm.triggerTime == request.defaultAlarm || packageHandler.addPackageAndCheckIfAllowed(request.context, nextAlarm.showIntent.creatorPackage)) {
+                    sendAlarm = nextAlarm.triggerTime
+                } else if (request.defaultAlarm != null)
+                    sendAlarm = request.defaultAlarm
+            }
+        } catch(ex:Exception) {
+            // something strange happened here. Won't try again to avoid repeating errors
+            setPreference(request.context, R.string.pref_key, R.string.error_key,ex.localizedMessage)
+            return OpenHABResponse(OpenHABResponseType.Failure,null)
         }
 
         val response = sendOpenhabReq(request.openHabUrl,request.itemName, sendAlarm ,request.context)
@@ -84,12 +89,12 @@ class AsyncOpenHabRequest(val jobIdProvider: IProvideFreeJobId, val packageHandl
                 setPreference(context, R.string.pref_key, R.string.error_key,"")
                 return OpenHABResponseType.Success
             }
-            setPreference(context, R.string.pref_key, R.string.error_key,"Target responded with " + responseCode.toString())
+            setPreference(context, R.string.pref_key, R.string.error_key,context.getString(R.string.illegal_target_response,responseCode.toString()))
             return OpenHABResponseType.Denied
         }
         catch (ex:Exception)
         {
-            setPreference(context, R.string.pref_key, R.string.error_key,ex.message + "trying again")
+            setPreference(context, R.string.pref_key, R.string.error_key,ex.localizedMessage)
             createJob(restUrl, itemName,alarm, context)
             return OpenHABResponseType.FailureRetry
         }

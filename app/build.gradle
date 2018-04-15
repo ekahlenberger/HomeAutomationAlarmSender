@@ -10,8 +10,8 @@ android {
         applicationId "net.kahlenberger.eberhard.haas"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

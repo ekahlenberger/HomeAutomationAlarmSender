@@ -20,5 +20,5 @@
     <string name="generic_app_icon" translatable="true">generic app icon</string>
     <string name="specific_app_icon" translatable="true">App icon of %1$s</string>
     <string name="manage_alarm_apps" translatable="true">Manage alarm apps</string>
-
+    <string name="illegal_target_response" translatable="true">Target responded with %1$s</string>
 </resources>
