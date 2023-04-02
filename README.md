@@ -1,3 +1,5 @@
+# Archived - no more development
+
 <p align=center>
   <img alt="Logo" src="fastlane/metadata/android/en-US/images/icon.png" width="100"/>
 </p>
